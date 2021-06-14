@@ -1,0 +1,9 @@
+db connection :-
+
+	j2ee
+			DBConnection
+					open - close -- maintain 
+					
+	spring - ioc container 
+		singleton 
+		
