@@ -6,4 +6,34 @@ db connection :-
 					
 	spring - ioc container 
 		singleton 
-		
+	----------------------------------------------------------
+	
+	1) pom.xml
+		commons-fileupload
+		commons-io
+
+2) create resources folder inside webapp 
+	also create images forlder inside resources 
+
+3) configure CommonsMultiPartResolver class in spring.xml 
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+		<property name="maxUploadSize" value="500000"></property>
+	</bean>
+
+4) now create jsp for file upload 
+	jsp must have form method post and encType mulipart/form-data 
+	add 1 input type file with name attribute 
+
+5) create action in controller 
+	map that action with post mapping 
+	fetch file using @RequestParam and store into MutliPartFile interface 
+
+6) create blank file in resoruces/images/ usign File class 
+
+7) copy all bytes of MultipartFile into 1 byte array 
+
+8) using FileUtils paste all bytes to empty file that u created in step 6
+ 
+	
