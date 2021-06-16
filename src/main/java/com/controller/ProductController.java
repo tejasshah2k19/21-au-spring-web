@@ -19,13 +19,14 @@ import com.dao.ProductDao;
 public class ProductController {
 
 	@Autowired
-	ProductDao productDao;
+	ProductDao productDao;     
 
 	@GetMapping("/newproduct")
 	public String newProduct(Model model) {
 		model.addAttribute("product", new ProductBean());
 		return "NewProduct";
 	}
+	 
 
 	@PostMapping("/saveproduct")
 	public String saveProduct(@ModelAttribute("product") @Valid ProductBean product, BindingResult result,
@@ -52,13 +53,38 @@ public class ProductController {
 		model.addAttribute("products", products);
 		return "ListProduct";
 	}
-	
+
 	@GetMapping("/deleteproduct/{productId}")
 	public String deleteProduct(@PathVariable("productId") int productId) {
 		productDao.deleteProductById(productId);
 		return "redirect:/listproducts";
 	}
+
+	@GetMapping("/editproduct/{productId}")
+	public String editProduct(@PathVariable("productId") int productId, Model model) {
+		ProductBean product = productDao.getProductById(productId);
+		model.addAttribute("product", product);
+		return "EditProduct";
+	}
 	
+	@PostMapping("/updateproduct")
+	public String updateProduct(@ModelAttribute("product") @Valid ProductBean product, BindingResult result,
+			Model model) {
+
+		if (result.hasErrors()) {
+
+			model.addAttribute("product", product);
+			return "EditProduct";
+		} else {
+			// insert into db
+			productDao.updateProduct(product);
+			model.addAttribute("msg", "Product Modified successfully....");
+			return "Home";
+
+		}
+
+	}
+
 	
 
 }

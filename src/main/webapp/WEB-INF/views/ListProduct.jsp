@@ -25,7 +25,9 @@
 				<td>${p.productId }</td>
 				<td>${p.productName }</td>
 				<td>${p.price }</td>
-				<td><a href="deleteproduct/${p.productId }"> Delete</a></td>
+				<td><a href="deleteproduct/${p.productId }"> Delete</a> | 
+				<a href="editproduct/${p.productId}"> Edit</a>
+				</td>
 			</tr>
 		</c:forEach>
 
