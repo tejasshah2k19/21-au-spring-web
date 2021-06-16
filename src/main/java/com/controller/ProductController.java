@@ -64,7 +64,7 @@ public class ProductController {
 	public String editProduct(@PathVariable("productId") int productId, Model model) {
 		ProductBean product = productDao.getProductById(productId);
 		model.addAttribute("product", product);
-		return "EditProduct";
+		return "NewProduct";
 	}
 	
 	@PostMapping("/updateproduct")

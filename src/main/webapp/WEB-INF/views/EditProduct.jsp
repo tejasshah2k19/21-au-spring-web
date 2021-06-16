@@ -6,7 +6,7 @@
 <html>
 <head>
 <body>
-	<h2>Add New Product</h2>
+	<h2>Edit New Product</h2>
 
 	<s:form action="../updateproduct" modelAttribute="product" method="post">
 	
