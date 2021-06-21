@@ -7,12 +7,21 @@ import org.hibernate.validator.constraints.NotBlank;
 public class ProductBean {
 
 	int productId;
-	
-	@NotBlank(message="Please Add Product Name")
+	String imgPath;
+
+	@NotBlank(message = "Please Add Product Name")
 	String productName;
-	
-	@NotNull(message="Price can not be blank")
+
+	@NotNull(message = "Price can not be blank")
 	Integer price;
+
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
 
 	public int getProductId() {
 		return productId;
@@ -37,8 +46,5 @@ public class ProductBean {
 	public void setPrice(Integer price) {
 		this.price = price;
 	}
-
-	
-	
 
 }

@@ -9,27 +9,34 @@
 </head>
 <body>
 
-<a href="newproduct">New Product</a> |<br>
+	<a href="newproduct">New Product</a> |
+	<br>
 	<h2>List Products</h2>
 	<table border="1">
 		<tr>
 			<th>ProductId</th>
 			<th>ProductName</th>
 			<th>Price</th>
+			<th>Img</th>
 			<th>Action</th>
-			
+
 		</tr>
 
 		<c:forEach items="${products}" var="p">
 			<tr>
 				<td>${p.productId }</td>
 				<td>${p.productName }</td>
-				<td>${p.price }</td>
-				<td><a href="deleteproduct/${p.productId }"> Delete</a> | 
-				<a href="editproduct/${p.productId}"> Edit</a>|
-				<a href="addproductimage">Add Image</a>
-				
-				</td>
+				<td>${p.price }</td>   
+
+				<td><img src="/${p.imgPath }" height="50px" width="50px" /></td>
+				<td><a href="deleteproduct/${p.productId }"> Delete</a> | <a
+					href="editproduct/${p.productId}"> Edit</a>| <a
+					href="addproductimage/${p.productId }">Add cover Image</a> |
+					<a href="viewproduct/${p.productId }">View Details</a>
+					| <a
+					href="addmoreproductimage/${p.productId }">Add more Image</a>
+					
+					</td>
 			</tr>
 		</c:forEach>
 

@@ -90,52 +90,39 @@ public class ProductController {
 
 	}
 
-	@GetMapping("/addproductimage")
-	public String addProductImage(Model model) {
-		model.addAttribute("product", new ProductBean());
+	@GetMapping("/addproductimage/{id}")
+	public String addProductImage(Model model, @PathVariable("id") int id) {
+		ProductBean product = new ProductBean();
+		product.setProductId(id);
+		model.addAttribute("product", product);
 
 		return "NewProductImage";
 	}
 
 	@PostMapping("/uploadimage")
-	public String uploadImage(@RequestParam("productImage") MultipartFile file) {
+	public String uploadImage(@RequestParam("productImage") MultipartFile file,@RequestParam("productId") int productId) {
 		System.out.println("-----uploading start------");
 		try {
-		String fileName = file.getOriginalFilename();
-		System.out.println("file name ==> "+fileName);
-		String dir = "D:\\Tejas Shah\\Dropbox\\Tejas Shah's Workplace\\work\\21-au-spring-web\\src\\main\\webapp\\resources\\images\\";
-    
-		File f  = new File(dir,fileName);//images / 3.jpg
-		f.createNewFile();//blank file 
-		byte allBytes[] = file.getBytes();
-		
-		FileUtils.writeByteArrayToFile(f, allBytes);
-		}catch(IOException e) {
+			String fileName = file.getOriginalFilename();
+			System.out.println("file name ==> " + fileName);
+			String dir = "D:\\Tejas Shah\\Dropbox\\Tejas Shah's Workplace\\work\\21-au-spring-web\\src\\main\\webapp\\resources\\images\\";
+			File productDir = new File(dir+productId);
+			productDir.mkdir();//folder if not present otherwise ignore and return fasle
+
+			File f = new File(productDir, fileName);// images / 3.jpg
+			f.createNewFile();// blank file
+			byte allBytes[] = file.getBytes();
+
+			FileUtils.writeByteArrayToFile(f, allBytes);
+			String dbPath = "21-au-spring-web/resources/images/"+productId+"/"+fileName;
+			
+			productDao.addImage(dbPath,productId);
+			
+			
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return "redirect:/listproducts";
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

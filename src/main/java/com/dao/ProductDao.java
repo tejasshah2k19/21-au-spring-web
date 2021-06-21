@@ -45,9 +45,12 @@ public class ProductDao {
 	}
 
 	public void updateProduct(ProductBean product) {
-		stmt.update("update product set productname = ? , price = ? where productid = ?",product.getProductName(),product.getPrice(),product.getProductId());
+		stmt.update("update product set productname = ? , price = ? where productid = ?", product.getProductName(),
+				product.getPrice(), product.getProductId());
 	}
-	
-	
-	
+
+	public void addImage(String dbPath, int productId) {
+		stmt.update("update product set imgPath = ? where productId = ? ", dbPath, productId);
+	}
+
 }

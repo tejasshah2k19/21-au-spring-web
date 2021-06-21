@@ -18,7 +18,8 @@
 	Phone : ${user.phone }<br>
 	 --%>
 	
-	<a href="newproduct">New Product</a> | <a href="listproducts">List Products</a>
+	<a href="newproduct">New Product</a> | <a href="listproducts">List Products</a> |
+	<a href="addproductimage">Add Product Image</a>
 	
 	<br>
 	<br>
