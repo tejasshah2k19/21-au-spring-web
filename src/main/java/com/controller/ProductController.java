@@ -20,12 +20,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bean.ProductBean;
 import com.dao.ProductDao;
+import com.service.ImageUploadService;
 
 @Controller
 public class ProductController {
 
 	@Autowired
 	ProductDao productDao;
+
+	@Autowired
+	ImageUploadService imgService;
 
 	@GetMapping("/newproduct")
 	public String newProduct(Model model) {
@@ -34,16 +38,29 @@ public class ProductController {
 	}
 
 	@PostMapping("/saveproduct")
-	public String saveProduct(@ModelAttribute("product") @Valid ProductBean product, BindingResult result,
-			Model model) {
-
+	public String saveProduct(@ModelAttribute("product") @Valid ProductBean product, BindingResult result, Model model,
+			@RequestParam("productImage") MultipartFile file) {
+		System.out.println(file.getOriginalFilename());
 		if (result.hasErrors()) {
 
 			model.addAttribute("product", product);
 			return "NewProduct";
 		} else {
 			// insert into db
-			productDao.insertProduct(product);
+
+
+			int productId = productDao.insertProduct(product);
+			product.setProductId(productId);
+
+			
+
+			String dir = "D:\\Tejas Shah\\Dropbox\\Tejas Shah's Workplace\\work\\21-au-spring-web\\src\\main\\webapp\\resources\\images\\"
+					+ product.getProductId();
+			
+			imgService.uploadData(file, dir);
+			product.setImgPath(
+					"21-au-spring-web/resources/images/" + product.getProductId() + "/" + file.getOriginalFilename());
+			productDao.addImage(product.getImgPath(), product.getProductId());
 			model.addAttribute("msg", "Product Added");
 			return "Home";
 
@@ -100,28 +117,24 @@ public class ProductController {
 	}
 
 	@PostMapping("/uploadimage")
-	public String uploadImage(@RequestParam("productImage") MultipartFile file,@RequestParam("productId") int productId) {
+	public String uploadImage(@RequestParam("productImage") MultipartFile file,
+			@RequestParam("productId") int productId) {
 		System.out.println("-----uploading start------");
-		try {
-			String fileName = file.getOriginalFilename();
-			System.out.println("file name ==> " + fileName);
-			String dir = "D:\\Tejas Shah\\Dropbox\\Tejas Shah's Workplace\\work\\21-au-spring-web\\src\\main\\webapp\\resources\\images\\";
-			File productDir = new File(dir+productId);
-			productDir.mkdir();//folder if not present otherwise ignore and return fasle
-
-			File f = new File(productDir, fileName);// images / 3.jpg
-			f.createNewFile();// blank file
-			byte allBytes[] = file.getBytes();
-
-			FileUtils.writeByteArrayToFile(f, allBytes);
-			String dbPath = "21-au-spring-web/resources/images/"+productId+"/"+fileName;
-			
-			productDao.addImage(dbPath,productId);
-			
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+		String dir = "D:\\Tejas Shah\\Dropbox\\Tejas Shah's Workplace\\work\\21-au-spring-web\\src\\main\\webapp\\resources\\images\\"
+				+ productId;
+		File f = new File(dir);
+		if (f.exists()) {
+			String s[] = f.list();
+			for (String fn : s) {
+				File fdelete = new File(dir, fn);
+				if (fdelete.isFile())
+					fdelete.delete();
+			}
 		}
+
+		imgService.uploadData(file, dir);
+		productDao.addImage("21-au-spring-web/resources/images/" + productId + "/" + file.getOriginalFilename(),
+				productId);
 		return "redirect:/listproducts";
 	}
 

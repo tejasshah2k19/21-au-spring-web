@@ -23,7 +23,7 @@
 
 	<h2>${title }</h2>
 
-	<s:form action="${url}" modelAttribute="product" method="post">
+	<s:form action="${url}" modelAttribute="product" method="post" enctype="multipart/form-data">
 	
 	ProductName :
 	<s:input path="productName" />
@@ -34,7 +34,8 @@
 		<s:errors path="price"></s:errors>
 		<br>
 		<br>
-
+Image: <input type="file" name="productImage"><br>
+<br><br>
 		<input type="submit" value="${btnValue}">
 
 	</s:form>

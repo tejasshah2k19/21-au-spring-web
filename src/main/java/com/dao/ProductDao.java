@@ -1,10 +1,16 @@
 package com.dao;
 
+import java.beans.Statement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.bean.ProductBean;
@@ -17,10 +23,31 @@ public class ProductDao {
 
 	// insert update delete --> update()
 
-	public void insertProduct(ProductBean product) {
+	public int insertProduct(final ProductBean product) {
+		int productId = 0;
 
-		stmt.update("insert into product (productname,price) values (?,?)", product.getProductName(),
-				product.getPrice());
+		GeneratedKeyHolder holder = new GeneratedKeyHolder();
+
+		stmt.update(new PreparedStatementCreator() {
+
+			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+
+				PreparedStatement pstmt = con.prepareStatement("insert into product (productname,price,imgpath) values (?,?,?)",
+						java.sql.Statement.RETURN_GENERATED_KEYS);
+
+				pstmt.setString(1, product.getProductName());
+				pstmt.setInt(2, product.getPrice());
+				pstmt.setString(3, "");
+
+				// TODO Auto-generated method stub
+				return pstmt;
+			}
+		}, holder);
+
+		productId = (Integer)holder.getKeys().get("productId");
+		
+		return productId;
+		//
 	}
 
 	public List<ProductBean> getAllProducts() {
