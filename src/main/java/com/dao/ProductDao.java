@@ -32,20 +32,21 @@ public class ProductDao {
 
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 
-				PreparedStatement pstmt = con.prepareStatement("insert into product (productname,price,imgpath) values (?,?,?)",
+				PreparedStatement pstmt = con.prepareStatement("insert into product (productname,price,imgpath,categoryid) values (?,?,?,?)",
 						java.sql.Statement.RETURN_GENERATED_KEYS);
 
 				pstmt.setString(1, product.getProductName());
 				pstmt.setInt(2, product.getPrice());
 				pstmt.setString(3, "");
-
+				pstmt.setInt(4, product.getCategoryId());
+				
 				// TODO Auto-generated method stub
 				return pstmt;
 			}
 		}, holder);
 
 		productId = (Integer)holder.getKeys().get("productId");
-		
+		System.out.println("product inserted..... with => "+productId);
 		return productId;
 		//
 	}
@@ -53,7 +54,7 @@ public class ProductDao {
 	public List<ProductBean> getAllProducts() {
 		// query("query","mapper") --> return 0 or n
 
-		List<ProductBean> products = stmt.query("select * from product",
+		List<ProductBean> products = stmt.query("select * from product,category where product.categoryid = category.categoryid",
 				new BeanPropertyRowMapper<ProductBean>(ProductBean.class));
 		return products;
 	}

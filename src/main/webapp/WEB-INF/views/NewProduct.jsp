@@ -23,7 +23,8 @@
 
 	<h2>${title }</h2>
 
-	<s:form action="${url}" modelAttribute="product" method="post" enctype="multipart/form-data">
+	<s:form action="${url}" modelAttribute="product" method="post"
+		enctype="multipart/form-data">
 	
 	ProductName :
 	<s:input path="productName" />
@@ -34,8 +35,17 @@
 		<s:errors path="price"></s:errors>
 		<br>
 		<br>
-Image: <input type="file" name="productImage"><br>
-<br><br>
+
+	Category : <s:select path="categoryId">
+					<s:options items="${category}"   itemLabel="categoryName"  itemValue="categoryId"></s:options>
+				</s:select>
+
+
+	<br><br>
+Image: <input type="file" name="productImage">
+		<br>
+		<br>
+		<br>
 		<input type="submit" value="${btnValue}">
 
 	</s:form>

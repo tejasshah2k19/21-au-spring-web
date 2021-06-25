@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.io.FileUtils;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bean.ProductBean;
+import com.dao.CategoryDao;
 import com.dao.ProductDao;
 import com.service.ImageUploadService;
 
@@ -31,9 +34,14 @@ public class ProductController {
 	@Autowired
 	ImageUploadService imgService;
 
+	@Autowired
+	CategoryDao categoryDao;
+	
 	@GetMapping("/newproduct")
-	public String newProduct(Model model) {
-		model.addAttribute("product", new ProductBean());
+	public String newProduct(Model model, ProductBean bean) {
+		model.addAttribute("product", bean);
+		model.addAttribute("category",categoryDao.getAllCategories());
+		
 		return "NewProduct";
 	}
 
@@ -47,16 +55,13 @@ public class ProductController {
 			return "NewProduct";
 		} else {
 			// insert into db
-
-
+			System.out.println(product.getCategoryId());
 			int productId = productDao.insertProduct(product);
 			product.setProductId(productId);
 
-			
-
 			String dir = "D:\\Tejas Shah\\Dropbox\\Tejas Shah's Workplace\\work\\21-au-spring-web\\src\\main\\webapp\\resources\\images\\"
 					+ product.getProductId();
-			
+
 			imgService.uploadData(file, dir);
 			product.setImgPath(
 					"21-au-spring-web/resources/images/" + product.getProductId() + "/" + file.getOriginalFilename());
