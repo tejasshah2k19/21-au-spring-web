@@ -17,6 +17,8 @@ public class UserBean {
 	@NotNull(message="Please add age")
 	Integer age;
 	
+	String password,phone,address, course;
+	 
 	
 	public Integer getAge() {
 		return age;
@@ -26,7 +28,6 @@ public class UserBean {
 		this.age = age;
 	}
 
-	String password,phone,address, course;
 
 	@NotBlank(message="Please Select Gender")
 	String gender;
